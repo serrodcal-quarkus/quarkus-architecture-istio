@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: employee
+  namespace: employee
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: employee
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+    #istio-injection: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee
+  namespace: employee
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: employee
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  selector:
+    app: employee
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee
+  namespace: employee
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: employee
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee
+  template:
+    metadata:
+      labels:
+        app: employee
+        app.kubernetes.io/name: quarkus
+        app.kubernetes.io/instance: employee
+        app.kubernetes.io/version: 1.0.0
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: human-resource
+        app.kubernetes.io/managed-by: kubectl
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: employee
+          image: serrodcal/quarkus-arch-employee-istio:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: QUARKUS_DATASOURCE_REACTIVE_URL
+              value: postgresql://database.database.svc.cluster.local:5432/quarkus_test
+          resources:
+            requests:
+              memory: 300M
+              cpu: 300m
+            limits:
+              memory: 300M
+              cpu: 300m
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 4
+            periodSeconds: 15
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: employee
+  namespace: employee
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: employee
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: employee
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

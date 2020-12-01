@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: human-resources
+  namespace: human-resources
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: human-resources
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: human-resources
+  namespace: human-resources
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: human-resources
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  selector:
+    app: human-resources
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: human-resources
+  namespace: human-resources
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: human-resources
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+    #istio-injection: enabled
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: human-resources
+  template:
+    metadata:
+      labels:
+        app: human-resources
+        app.kubernetes.io/name: quarkus
+        app.kubernetes.io/instance: human-resources
+        app.kubernetes.io/version: 1.0.0
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: human-resource
+        app.kubernetes.io/managed-by: kubectl
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: human-resources
+          image: serrodcal/quarkus-arch-human-resources-istio:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: EMPLOYEE_URL
+              value: http://employee.employee.svc.cluster.local:8080/api/v1
+            - name: DEPARTMENT_URL
+              value: http://department.department.svc.cluster.local:8080/api/v1
+          resources:
+            requests:
+              memory: 300M
+              cpu: 300m
+            limits:
+              memory: 300M
+              cpu: 300m
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 4
+            periodSeconds: 15
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: human-resources
+  namespace: human-resources
+  labels:
+    app.kubernetes.io/name: quarkus
+    app.kubernetes.io/instance: human-resources
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: human-resource
+    app.kubernetes.io/managed-by: kubectl
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: human-resources
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
