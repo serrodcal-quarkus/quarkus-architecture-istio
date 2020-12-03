@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/component: application
     app.kubernetes.io/part-of: human-resource
     app.kubernetes.io/managed-by: kubectl
-    #istio-injection: enabled
+    istio-injection: enabled
 ---
 apiVersion: v1
 kind: Service
@@ -60,8 +60,6 @@ spec:
         app.kubernetes.io/component: application
         app.kubernetes.io/part-of: human-resource
         app.kubernetes.io/managed-by: kubectl
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: employee

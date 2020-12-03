@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: human-resources-gateway
+  namespace: human-resources
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: human-resources
+  namespace: human-resources
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - human-resources-gateway
+  http:
+  - match:
+    #- uri:
+        #exact: /productpage
+    - uri:
+        prefix: /api/v1
+    route:
+    - destination:
+        host: human-resources
+        port:
+          number: 8080

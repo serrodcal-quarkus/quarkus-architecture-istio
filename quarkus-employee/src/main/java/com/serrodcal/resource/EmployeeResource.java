@@ -52,7 +52,6 @@ public class EmployeeResource {
                 });
     }
 
-
     @Route(path = "employee/:id", methods = HttpMethod.GET)
     void getEmployee(RoutingContext rc, @Param("id") String id) {
         logger.info("getEmployee with [id:" + id.toString() + "]");

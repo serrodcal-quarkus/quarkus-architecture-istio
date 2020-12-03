@@ -25,9 +25,9 @@ public class HRResource {
     HRService hrService;
 
     @Route(path = "hr/employee/:employeeId/assign/department/:deptId", methods = HttpMethod.POST)
-    void assignEmployeeToDept(RoutingContext rc, @Param("employeeId") String employeeId, @Param("deptId") String deptId) {
-        logger.info("assignEmployeeToDept with [employeeId:" + employeeId + ", dept:" + deptId + "]");
-        this.hrService.assignEmployeeToDept(Long.valueOf(employeeId), Long.valueOf(deptId)).subscribe().with(result -> {
+    void assignEmployeeToDept(RoutingContext rc, @Param("employeeId") Long employeeId, @Param("deptId") Long deptId) {
+        logger.info("assignEmployeeToDept with [employeeId:" + employeeId.toString() + ", dept:" + deptId.toString() + "]");
+        this.hrService.assignEmployeeToDept(employeeId, deptId).subscribe().with(result -> {
                     if (result) {
                         rc.response()
                                 .setStatusCode(HttpResponseStatus.OK.code())
@@ -47,9 +47,9 @@ public class HRResource {
     }
 
     @Route(path = "hr/employee/:employeeId/unassign", methods = HttpMethod.DELETE)
-    void unassignEmployee(RoutingContext rc, @Param("id") String id) {
-        logger.info("unassignEmployeeToDept wit [id:" + id + "]");
-        this.hrService.unassignEmployee(Long.valueOf(id)).subscribe().with(result -> {
+    void unassignEmployee(RoutingContext rc, @Param("employeeId") Long employeeId) {
+        logger.info("unassignEmployeeToDept wit [id:" + employeeId.toString() + "]");
+        this.hrService.unassignEmployee(employeeId).subscribe().with(result -> {
                     if (result) {
                         rc.response()
                                 .setStatusCode(HttpResponseStatus.OK.code())
@@ -69,8 +69,9 @@ public class HRResource {
     }
 
     @Route(path = "hr/department/:deptId", methods = HttpMethod.DELETE)
-    void unassignEmployees(RoutingContext rc, @Param("deptId") String deptId) {
-        this.hrService.unassignEmployees(Long.valueOf(deptId)).subscribe().with(result -> {
+    void unassignEmployees(RoutingContext rc, @Param("deptId") Long deptId) {
+        logger.info("unassignEmployees wit [id:" + deptId.toString() + "]");
+        this.hrService.unassignEmployees(deptId).subscribe().with(result -> {
                     if (result) {
                         rc.response()
                                 .setStatusCode(HttpResponseStatus.OK.code())

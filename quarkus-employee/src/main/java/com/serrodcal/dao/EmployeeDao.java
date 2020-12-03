@@ -1,6 +1,7 @@
 package com.serrodcal.dao;
 
 import com.serrodcal.domain.Employee;
+import io.quarkus.runtime.Startup;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.stream.StreamSupport;
 
+@Startup
 @Singleton
 public class EmployeeDao {
 
