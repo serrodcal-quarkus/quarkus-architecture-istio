@@ -27,14 +27,17 @@ spec:
               port: 15021
               targetPort: 15021
               nodePort: 30002
+              protocol: TCP
             - name: http2
               port: 80
               targetPort: 8080
               nodePort: 30000
+              protocol: TCP
             - name: https
               port: 443
               targetPort: 8443
               nodePort: 30001
+              protocol: TCP
         - apiVersion: policy/v1beta1
           kind: PodDisruptionBudget
           name: istio-ingressgateway
