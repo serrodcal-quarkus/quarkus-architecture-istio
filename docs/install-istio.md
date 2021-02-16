@@ -14,6 +14,6 @@ $ ./istioctl install -f ../../kind/install-istio.yaml
 
 3. Install addons (deploy the Kiali dashboard, along with Prometheus, Grafana, and Jaeger) from `istio-<version>` directory:
 
-````
+```
 $ kubectl apply -f samples/addons
 ```
