@@ -29,5 +29,5 @@ nodes:
 2. Create a cluster using the configuration above:
 
 ```
-$ kind create cluster --image kindest/node:v1.19.4 --config kind/kind-istio-ingress-config.yaml
+$ kind create cluster --config kind/kind-istio-ingress-config.yaml
 ```
