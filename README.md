@@ -6,7 +6,7 @@ Replace security, monitoring or resilience features in Quarkus delegating these 
 
 ![](/img/istio.png)
 
-The main adventage is to be able to build a native application, this is lighter artifacts, better boot time and less resource fingerprint.
+The main adventage is to be able to build a native application, this is lighter artifacts, better boot time and less memory footprint.
 
 ## Requirements
 
