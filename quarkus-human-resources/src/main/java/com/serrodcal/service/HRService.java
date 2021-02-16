@@ -19,11 +19,11 @@ public class HRService {
 
     public Uni<Boolean> assignEmployeeToDept(Long employeeId, Long deptId) {
 
-        return this.departmentService.getDepartment(deptId).flatMap(dept -> {
-            return this.employeeService.getEmployee(employeeId).flatMap(empl -> {
+        return this.departmentService.getDepartment(deptId).onItem().transformToUni( dept -> {
+            return this.employeeService.getEmployee(employeeId).onItem().transformToUni(empl -> {
                 if (empl.deptId != dept.id) {
                     empl.deptId = dept.id;
-                    return this.employeeService.updateEmployee(empl).flatMap(result -> {
+                    return this.employeeService.updateEmployee(empl).onItem().transformToUni(result -> {
                         if (result.getStatus() == 200) {
                             return Uni.createFrom().item(true);
                         } else {
@@ -35,12 +35,13 @@ public class HRService {
                 }
             });
         });
+
     }
 
     public Uni<Boolean> unassignEmployee(Long id) {
-        return this.employeeService.getEmployee(id).flatMap(empl -> {
+        return this.employeeService.getEmployee(id).onItem().transformToUni(empl -> {
             empl.deptId = null;
-            return this.employeeService.updateEmployee(empl).flatMap(result -> {
+            return this.employeeService.updateEmployee(empl).onItem().transformToUni(result -> {
                 if (result.getStatus() == 200) {
                     return Uni.createFrom().item(true);
                 } else {
@@ -51,10 +52,10 @@ public class HRService {
     }
 
     public Uni<Boolean> unassignEmployees(Long deptId) {
-        return this.departmentService.getDepartment(deptId).flatMap(dept -> {
-            return this.employeeService.getEmployeesByDept(dept.id).flatMap(employees ->{
+        return this.departmentService.getDepartment(deptId).onItem().transformToUni(dept -> {
+            return this.employeeService.getEmployeesByDept(dept.id). onItem().transformToUni(employees ->{
                 if (employees.size() > 0){
-                    return this.employeeService.unassignEmployees(deptId).flatMap(result -> {
+                    return this.employeeService.unassignEmployees(deptId).onItem().transformToUni(result -> {
                         if (result.getStatus() == 200) {
                             return Uni.createFrom().item(true);
                         } else {
