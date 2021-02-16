@@ -4,6 +4,8 @@ Evolution of [quarkus-architecture](https://github.com/serrodcal/quarkus-archite
 
 Replace security, monitoring or resilience features in Quarkus delegating these features to Istio. So, Quarkus will only have the business logic.
 
+![](/img/istio.png)
+
 The main adventage is to be able to build a native application, this is lighter artifacts, better boot time and less resource fingerprint.
 
 ## Requirements
