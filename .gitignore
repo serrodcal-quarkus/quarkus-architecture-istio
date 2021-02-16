@@ -2,6 +2,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,git,maven,java,intellij,intellij+all,intellij+iml,sublimetext,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,git,maven,java,intellij,intellij+all,intellij+iml,sublimetext,visualstudiocode
 
+### Istio ###
+
+istio-*
+
 ### Git ###
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false
