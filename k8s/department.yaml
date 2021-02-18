@@ -93,24 +93,3 @@ spec:
               port: 8080
             initialDelaySeconds: 4
             periodSeconds: 15
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: department
-  namespace: department
-  labels:
-    app.kubernetes.io/name: quarkus
-    app.kubernetes.io/instance: department
-    app.kubernetes.io/version: 1.0.0
-    app.kubernetes.io/component: application
-    app.kubernetes.io/part-of: human-resource
-    app.kubernetes.io/managed-by: kubectl
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: department
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80

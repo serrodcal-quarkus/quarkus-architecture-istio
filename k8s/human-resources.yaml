@@ -96,27 +96,6 @@ spec:
             initialDelaySeconds: 4
             periodSeconds: 15
 ---
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: human-resources
-  namespace: human-resources
-  labels:
-    app.kubernetes.io/name: quarkus
-    app.kubernetes.io/instance: human-resources
-    app.kubernetes.io/version: 1.0.0
-    app.kubernetes.io/component: application
-    app.kubernetes.io/part-of: human-resource
-    app.kubernetes.io/managed-by: kubectl
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: human-resources
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
----
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
