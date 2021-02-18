@@ -10,9 +10,9 @@ The main adventage is to be able to build a native application, this is lighter 
 
 ## Requirements
 
-* Docker 2.5.0.1
-* Kubernetes 1.19.4
-* Istio 1.8
+* Docker 3.1.0
+* Kubernetes 1.20.2
+* Istio 1.9.0
 
 ## Installing
 
